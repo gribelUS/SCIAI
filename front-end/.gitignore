@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+#Virtual Environment
+venv/
+
+# Config
+.env 
+config/config.json
+create_first_admin.py
+gui/add_user.py
+gui/login.py
