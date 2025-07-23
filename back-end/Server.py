@@ -1,0 +1,32 @@
+from flask import Flask, request, jsonify
+from Communication.PRTDB import PRTDB
+
+class Server:
+    def __init__(self, prtdb: PRTDB):
+        self.prtdb = prtdb
+        self.app = Flask(__name__)
+        self.setup_routes()
+
+    def setup_routes(self):
+        @self.app.route('/prt/dest', methods=['POST'])
+        def update_prt_destination():
+            data = request.get_json()
+            barcode = data.get('barcode')
+            destination = data.get('destination')
+
+            if not barcode or destination is None:
+                return jsonify({'error': 'Missing barcode or destination'}), 400
+
+            success = self.prtdb.update_destination_info(barcode, destination)
+            if success:
+                return jsonify({'message': f'Destination for {barcode} set to {destination}'}), 200
+            else:
+                return jsonify({'error': 'Database write failed'}), 500
+
+        @self.app.route('/prt/dest', methods=['GET'])
+        def get_prt_destinations():
+            destinations = self.prtdb.get_destination_info()
+            return jsonify(destinations), 200
+
+    def start_flask_server(self, host='0.0.0.0', port=2650):
+        self.app.run(host=host, port=port)
