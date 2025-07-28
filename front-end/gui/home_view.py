@@ -14,7 +14,13 @@ class HomeView(QWidget):
 
         # Title label
         label = QLabel("Live map & Control Panel")
-        label.setStyleSheet("font-size: 25px; color: #002855; font-weight: bold; color: white;")
+        label.setStyleSheet(
+        """
+            font-size: 25px;
+            color: #002855;
+            font-weight: bold;
+            color: white;
+        """)
         main_layout.addWidget(label)
 
         # Horizontal layout for map and panel
@@ -29,15 +35,29 @@ class HomeView(QWidget):
         # Side panel for cart info
         self.panel_frame = QFrame()
         self.panel_frame.setMinimumSize(300, 400)
-        self.panel_frame.setStyleSheet("background-color: #EAAA00; border: 2px solid #002855;")
+        self.panel_frame.setStyleSheet(
+            """
+            background-color: #EAAA00;
+            border: 2px solid #002855;
+            """)
 
         self.info_label = QLabel("Select a cart to view details.")
         self.info_label.setWordWrap(True)
-        self.info_label.setStyleSheet("padding: 10px; font-size: 25px; color: white;")
+        self.info_label.setStyleSheet(
+            """
+            padding: 10px;
+            font-size: 25px;
+            color: white;
+            """)
 
         panel_layout = QVBoxLayout()
         info_title = QLabel("<b>Cart Information</b>")
-        info_title.setStyleSheet("font-size: 20px; font-weight: bold; color: white;")
+        info_title.setStyleSheet(
+            """
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            """)
         panel_layout.addWidget(info_title)
         panel_layout.addWidget(self.info_label)
 
@@ -45,19 +65,52 @@ class HomeView(QWidget):
         self.station_dropdown = QComboBox()
         self.station_dropdown.addItems(["Station 1", "Station 2", "Station 3", "Station 4"])
         self.station_dropdown.setEnabled(False)
-        self.station_dropdown.setStyleSheet("QComboBox:enabled { background-color: white; color: #002855; } QComboBox:disabled { background-color: #f5e6b5; color: #888; }")
+        self.station_dropdown.setStyleSheet(
+            """
+            QComboBox:enabled {
+                background-color: white;
+                color: #002855;
+            }
+            QComboBox:disabled {
+                background-color: #f5e6b5;
+                color: #888;
+            }
+            """
+        )
         panel_layout.addWidget(self.station_dropdown)
 
         # Send button
         self.send_button = QPushButton("Send Cart to Station")
         self.send_button.setEnabled(False)
-        self.send_button.setStyleSheet("QPushButton:enabled { background-color: white; color: #002855; } QPushButton:disabled { background-color: #f5e6b5; color: #888; }")
+        self.send_button.setStyleSheet(
+            """
+            QPushButton:enabled {
+                background-color: white;
+                color: #002855;
+            }
+            QPushButton:disabled {
+                background-color: #f5e6b5;
+                color: #888;
+            }
+            """
+        )
         panel_layout.addWidget(self.send_button)
 
         # Remove active cart button
         self.remove_button = QPushButton("Remove Active Cart")
         self.remove_button.setEnabled(False)
-        self.remove_button.setStyleSheet("QPushButton:enabled { background-color: white; color: #002855; } QPushButton:disabled { background-color: #f5e6b5; color: #888; }")
+        self.remove_button.setStyleSheet(
+            """
+            QPushButton:enabled {
+                background-color: white;
+                color: #002855;
+            }
+            QPushButton:disabled {
+                background-color: #f5e6b5;
+                color: #888;
+            }
+            """
+        )
         panel_layout.addWidget(self.remove_button)
 
         panel_layout.addStretch()
