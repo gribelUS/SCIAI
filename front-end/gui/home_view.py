@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QFrame, QVBoxLayout, QLabel, QSizePolicy, QPushButton, QComboBox
+from PyQt5.QtCore import Qt
 from gui.track_view import TrackView
 from models.db import get_cart_info
 from models.api import send_cart_to_station
@@ -39,6 +40,7 @@ class HomeView(QWidget):
             """
             background-color: #EAAA00;
             border: 2px solid #002855;
+            border-radius: 6px;
             """)
 
         self.info_label = QLabel("Select a cart to view details.")
@@ -52,11 +54,14 @@ class HomeView(QWidget):
 
         panel_layout = QVBoxLayout()
         info_title = QLabel("<b>Cart Information</b>")
+        info_title.setAlignment(Qt.AlignCenter)
         info_title.setStyleSheet(
             """
             font-size: 20px;
             font-weight: bold;
             color: white;
+            border-radius: 6px;
+            padding: 10px;
             """)
         panel_layout.addWidget(info_title)
         panel_layout.addWidget(self.info_label)
@@ -70,11 +75,29 @@ class HomeView(QWidget):
             QComboBox:enabled {
                 background-color: white;
                 color: #002855;
+                border: 2px solid #002855;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 16px;
             }
             QComboBox:disabled {
                 background-color: #f5e6b5;
                 color: #888;
+                border: 2px solid #002855;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 16px;
             }
+            QComboBox QAbstractItemView {
+                background-color: white;
+                selection-background-color: #EAAA00;
+                selection-color: black;
+                border: 1px solid #002855;
+                border-radius: 6px;
+                font-size: 16px;
+                padding: 6px;
+                outline: 0;
+                }
             """
         )
         panel_layout.addWidget(self.station_dropdown)
@@ -87,14 +110,17 @@ class HomeView(QWidget):
             QPushButton:enabled {
                 background-color: white;
                 color: #002855;
+                border-radius: 6px;
+                padding: 6px;
             }
             QPushButton:disabled {
                 background-color: #f5e6b5;
                 color: #888;
+                border-radius: 6px;
+                padding: 6px;
             }
             """
         )
-        panel_layout.addWidget(self.send_button)
 
         # Remove active cart button
         self.remove_button = QPushButton("Remove Active Cart")
@@ -104,14 +130,27 @@ class HomeView(QWidget):
             QPushButton:enabled {
                 background-color: white;
                 color: #002855;
+                border-radius: 6px;
+                padding: 6px;
             }
             QPushButton:disabled {
                 background-color: #f5e6b5;
                 color: #888;
+                border-radius: 6px;
+                padding: 6px;
             }
             """
         )
-        panel_layout.addWidget(self.remove_button)
+
+        # Create horizontal layout for the two buttons
+        button_row = QHBoxLayout()
+        button_row.setSpacing(10)  # Optional: space between buttons
+        button_row.addWidget(self.send_button)
+        button_row.addWidget(self.remove_button)
+
+        # Add the row to the panel layout
+        panel_layout.addLayout(button_row)
+
 
         panel_layout.addStretch()
         self.panel_frame.setLayout(panel_layout)
