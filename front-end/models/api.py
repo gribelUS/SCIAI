@@ -47,3 +47,14 @@ def send_cart_to_station(cart_id, station_id):
             conn.close()
     except requests.RequestException as e:
         print(f"Error connecting to API: {e}")
+
+@app.route('/prt/remove', methods=['POST'])
+def remove_cart(cart_id, area):
+    """
+    Remove a cart from the conveyor system.
+    """
+    api_url = "http://localhost:2650/prt/remove"
+    payload = {
+        "barcode": cart_id,
+        "area": area
+    }

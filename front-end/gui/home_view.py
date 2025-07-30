@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from gui.track_view import TrackView
 from models.db import get_cart_info
 from models.api import send_cart_to_station
+from models.api import remove_cart
 
 class HomeView(QWidget):
     def __init__(self, parent=None):
@@ -43,6 +44,20 @@ class HomeView(QWidget):
             border-radius: 6px;
             """)
 
+        #self.cart_status = QWidget()
+        #self.cart_status_layout = QHBoxLayout()
+        #self.cart_status_layout.setContentsMargins(5, 5, 5, 5)
+        #self.cart_status_layout.setSpacing(10)
+        #self.cart_status.setLayout(self.cart_status_layout)
+        #self.cart_status.setStyleSheet(
+        #    """
+        #    padding: 10px;
+        #    font-size: 15;
+        #    color: white;
+        #    border-radius: 6px;
+        #    """
+        #)
+
         self.info_label = QLabel("Select a cart to view details.")
         self.info_label.setWordWrap(True)
         self.info_label.setStyleSheet(
@@ -53,6 +68,7 @@ class HomeView(QWidget):
             """)
 
         panel_layout = QVBoxLayout()
+
         info_title = QLabel("<b>Cart Information</b>")
         info_title.setAlignment(Qt.AlignCenter)
         info_title.setStyleSheet(
@@ -63,6 +79,7 @@ class HomeView(QWidget):
             border-radius: 6px;
             padding: 10px;
             """)
+        #panel_layout.addWidget(self.cart_status)
         panel_layout.addWidget(info_title)
         panel_layout.addWidget(self.info_label)
 
@@ -101,6 +118,43 @@ class HomeView(QWidget):
             """
         )
         panel_layout.addWidget(self.station_dropdown)
+
+        # Dropdown for areas
+        self.area_dropdown = QComboBox()
+        self.area_dropdown.addItems(["Area 1", "Area 2", "Area 3", "Area 4"])
+        self.area_dropdown.setEnabled(False)
+        self.area_dropdown.setStyleSheet(
+            """
+            QComboBox:enabled {
+                background-color: white;
+                color: #002855;
+                border: 2px solid #002855;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 16px;
+                }
+            QComboBox:disabled {
+                background-color: #f5e6b5;
+                color: #888;
+                border: 2px solid #002855;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 16px;
+                }
+            QComboBox QAbstractItemView {
+                background-color: white;
+                selection-background-color: #EAAA00;
+                selection-color: black;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                padding: 6px;
+                outline: none;
+                }
+            """
+        )
+
+        panel_layout.addWidget(self.area_dropdown)
 
         # Send button
         self.send_button = QPushButton("Send Cart to Station")
@@ -162,7 +216,7 @@ class HomeView(QWidget):
         self.setLayout(main_layout)
 
         self.send_button.clicked.connect(self.send_cart_to_station_clicked)
-        # self.remove_button.clicked.connect(self.remove_active_cart_clicked) # Uncomment when implemented
+        self.remove_button.clicked.connect(self.remove_active_cart_clicked)
 
     def display_cart_info(self, cart_id):
         data = get_cart_info(cart_id)
@@ -175,10 +229,13 @@ class HomeView(QWidget):
             )
             self.station_dropdown.setEnabled(True)
             self.send_button.setEnabled(True)
+            self.remove_button.setEnabled(True)
+            self.area_dropdown.setEnabled(True)
         else:
             self.info_label.setText(f"Cart '{cart_id}' has no recent data.")
             self.station_dropdown.setEnabled(False)
             self.send_button.setEnabled(False)
+            self.remove_button.setEnabled(False)
 
     def send_cart_to_station_clicked(self):
         if not hasattr(self, 'track_view') or not self.track_view.selected_cart_id:
@@ -188,3 +245,12 @@ class HomeView(QWidget):
         station_id = f"Station_{station_index + 1}"
         send_cart_to_station(cart_id, station_id)
         self.info_label.setText(f"Sent cart {cart_id} to {station_id}.")
+
+    def remove_active_cart_clicked(self):
+        if not hasattr(self, 'track_view') or not self.track_view.selected_cart_id:
+            return
+        cart_id = self.track_view.selected_cart_id
+        area = "1"
+        remove_cart(cart_id, area)
+
+    
