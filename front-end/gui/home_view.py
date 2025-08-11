@@ -109,8 +109,7 @@ class HomeView(QWidget):
                 background-color: white;
                 selection-background-color: #EAAA00;
                 selection-color: black;
-                border: 1px solid #002855;
-                border-radius: 6px;
+                border: none;
                 font-size: 16px;
                 padding: 6px;
                 outline: 0;
