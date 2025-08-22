@@ -83,9 +83,23 @@ class HomeView(QWidget):
         panel_layout.addWidget(info_title)
         panel_layout.addWidget(self.info_label)
 
+        # Dropdown Label (Station Destination)
+        station_label = QLabel("Select Station Destination:")
+        station_label.setStyleSheet(
+            """
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: 2px solid #002855;
+            border-radius: 6px;
+            padding: 6px 12px;
+            """
+        )
+        panel_layout.addWidget(station_label)
+
         # Dropdown for stations
         self.station_dropdown = QComboBox()
-        self.station_dropdown.addItems(["Station 1", "Station 2", "Station 3", "Station 4"])
+        self.station_dropdown.addItems(["","Station 1", "Station 2", "Station 3", "Station 4"])
         self.station_dropdown.setEnabled(False)
         self.station_dropdown.setStyleSheet(
             """
@@ -118,9 +132,23 @@ class HomeView(QWidget):
         )
         panel_layout.addWidget(self.station_dropdown)
 
+        # Dropdown label (Unload drop-off area)
+        area_label = QLabel("Select Unload Drop-off Area:")
+        area_label.setStyleSheet(
+            """
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: 2px solid #002855;
+            border-radius: 6px;
+            padding: 6px 12px;
+            """
+        )
+        panel_layout.addWidget(area_label)
+
         # Dropdown for areas
         self.area_dropdown = QComboBox()
-        self.area_dropdown.addItems(["Area 1", "Area 2", "Area 3", "Area 4"])
+        self.area_dropdown.addItems(["","Area 1", "Area 2", "Area 3", "Area 4"])
         self.area_dropdown.setEnabled(False)
         self.area_dropdown.setStyleSheet(
             """
@@ -217,6 +245,13 @@ class HomeView(QWidget):
         self.send_button.clicked.connect(self.send_cart_to_station_clicked)
         self.remove_button.clicked.connect(self.remove_active_cart_clicked)
 
+        # Connect dropdown changes to button state updates
+        self.station_dropdown.currentIndexChanged.connect(self.buttons_enabled)
+        self.area_dropdown.currentIndexChanged.connect(self.buttons_enabled)
+
+        # Initial button state
+        self.buttons_enabled()
+
     def display_cart_info(self, cart_id):
         data = get_cart_info(cart_id)
         if data:
@@ -227,29 +262,42 @@ class HomeView(QWidget):
                 f"<b>Time:</b> {data['time_stamp']}"
             )
             self.station_dropdown.setEnabled(True)
-            self.send_button.setEnabled(True)
-            self.remove_button.setEnabled(True)
             self.area_dropdown.setEnabled(True)
         else:
             self.info_label.setText(f"Cart '{cart_id}' has no recent data.")
             self.station_dropdown.setEnabled(False)
-            self.send_button.setEnabled(False)
-            self.remove_button.setEnabled(False)
+        self.buttons_enabled()
+
+    def buttons_enabled(self, *_):
+        cart_selected = hasattr(self, 'track_view') and getattr(self.track_view, 'selected_cart_id', None)
+        self.send_button.setEnabled(
+            bool(cart_selected) and self.station_dropdown.isEnabled() and self.station_dropdown.currentIndex() > 0
+        )
+        self.remove_button.setEnabled(
+            bool(cart_selected) and self.area_dropdown.isEnabled() and self.area_dropdown.currentIndex() > 0
+        )
 
     def send_cart_to_station_clicked(self):
         if not hasattr(self, 'track_view') or not self.track_view.selected_cart_id:
             return
+        if self.station_dropdown.currentIndex() <= 0:
+            return
         cart_id = self.track_view.selected_cart_id
         station_index = self.station_dropdown.currentIndex()
-        station_id = f"Station_{station_index + 1}"
+        station_id = f"Station_{station_index}"
         send_cart_to_station(cart_id, station_id)
         self.info_label.setText(f"Sent cart {cart_id} to {station_id}.")
+        self.buttons_enabled()
 
     def remove_active_cart_clicked(self):
         if not hasattr(self, 'track_view') or not self.track_view.selected_cart_id:
             return
+        if self.area_dropdown.currentIndex() <= 0:
+            return
         cart_id = self.track_view.selected_cart_id
-        area = "1"
+        area_text = self.area_dropdown.currentText()
+        area = area_text.split()[-1] if area_text else ""
         remove_cart(cart_id, area)
-
+        self.info_label.setText(f"Removed cart {cart_id} to area {area}.")
+        self.buttons_enabled()
     
