@@ -120,6 +120,8 @@ class ActivityLogView(QWidget):
         self.time_filter.setDateTime(QDateTime.currentDateTime().addDays(-1))
         filter_layout.addWidget(self.time_filter)
 
+        self.time_filter_dirty = False
+        self.time_filter.dateTimeChanged.connect(self._on_time_filter_changed)
         # Buttons
         self.filter_btn = QPushButton("Filter")
         self.filter_btn.setStyleSheet("""
@@ -162,19 +164,29 @@ class ActivityLogView(QWidget):
         self.setLayout(main_layout)
         self.load_logs()
 
+    def _on_time_filter_changed(self):
+        self.time_filter_dirty = True
+
     def load_logs(self):
         cart_id = self.cart_filter.currentData()
         position = self.station_filter.currentData()
+
+        if self.time_filter_dirty:
+            selected_time = self.time_filter.dateTime()
+            time_stamp = selected_time.toString("yyyy-MM-dd HH:mm:ss")
+        else:
+            time_stamp = None # No time restriction
         default_time = QDateTime.currentDateTime().addDays(-1)
         selected_time = self.time_filter.dateTime()
-        if selected_time == default_time:
-            time_stamp = None
-        else:
-            time_stamp = selected_time.toString("yyyy-MM-dd HH:mm:ss")
-
+        
         logs = fetch_filtered_logs(cart_id, position, time_stamp)
-        self.table.setRowCount(len(logs))
 
+        try:
+            logs = sorted(logs, key=lambda r: r.get("time_stamp"), reverse=True)
+        except Exception:
+            pass
+
+        self.table.setRowCount(len(logs))
         for i, row in enumerate(logs):
             ts = row["time_stamp"]
             ts_str = ts.strftime("%Y-%m-%d %H:%M:%S") if hasattr(ts, "strftime") else str(ts)
@@ -220,5 +232,8 @@ class ActivityLogView(QWidget):
     def clear_filters(self):
         self.cart_filter.setCurrentIndex(0)
         self.station_filter.setCurrentIndex(0)
+        self.time_filter.blockSignals(True)
         self.time_filter.setDateTime(QDateTime.currentDateTime().addDays(-1))
+        self.time_filter.blockSignals(False)
+        self.time_filter_dirty = False
         self.load_logs()
