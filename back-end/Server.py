@@ -28,5 +28,19 @@ class Server:
             destinations = self.prtdb.get_destination_info()
             return jsonify(destinations), 200
 
+        @self.app.route('/prt/remove', methods=['POST'])
+        def remove_cart():
+            data = request.get_json()
+            barcode = data.get('barcode')
+            area = data.get('area')
+
+            if not barcode or not area:
+                return jsonify({'error': 'Missing barcode or area'}), 400
+            success = self.prtdb.store_remove_cart(barcode, area)
+            if success:
+                return jsonify({'message': f'Cart {barcode} removed to area {area}'}), 200
+            else:
+                return jsonify({'error': 'Database write failed'}), 500
+
     def start_flask_server(self, host='0.0.0.0', port=2650):
         self.app.run(host=host, port=port)
