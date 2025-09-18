@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButton, QVBoxLayout, QInputDialog, QLineEdit, QMessageBox
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
@@ -52,8 +52,17 @@ class NavBar(QWidget):
             self.manage_users_btn.setCursor(Qt.PointingHandCursor)
             self.manage_users_btn.setCheckable(True)
             layout.addWidget(self.manage_users_btn)
+
+            self.mode_switch_btn = QPushButton("PLC Mode")
+            self.mode_switch_btn.setCursor(Qt.PointingHandCursor)
+            self.mode_switch_btn.setCheckable(True)
+            self.mode_switch_btn.clicked.connect(self.toggle_mode)
+            self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
+            layout.addWidget(self.mode_switch_btn)
+
         else:
             self.manage_users_btn = None
+            self.mode_switch_btn = None
 
         layout.addStretch()
         outer_layout.addWidget(container)
@@ -112,3 +121,13 @@ class NavBar(QWidget):
             self.dashboard_btn.setChecked(False)
             self.activity_btn.setChecked(False)
             self.manage_users_btn.setChecked(True)
+
+    def toggle_mode(self):
+        
+        if self.mode_switch_btn.isChecked():
+            self.mode_switch_btn.setText("Web Mode")
+            self.mode_switch_btn.setStyleSheet("background-color: #002855; color: white; border-radius: 5px;")
+
+        else:
+            self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
+            self.mode_switch_btn.setText("PLC Mode")

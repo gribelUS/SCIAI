@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
 )
 import pymysql
 from security import check_password
+from typing import Dict
 
 class LoginWindow(QDialog):
     def __init__(self):
