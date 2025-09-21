@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButton, QVBoxLayout, QInputDialog, QLineEdit, QMessageBox
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from login import check_logged_password
+from gui.login import logged_user_confirmation
 
 class NavBar(QWidget):
     def __init__(self, user):
         super().__init__()
+        self.user = user 
         self.setFixedHeight(100)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
@@ -99,6 +100,19 @@ class NavBar(QWidget):
                 color: #002855;
                 border-radius: 5px;
             }
+            QLineEdit {
+                font-size: 16px;
+                border: 1px solid black;
+                background-color: transparent;
+                border-radius: 5px;
+                padding: 5px;
+                color: white;
+            }
+            QInputDialog:getText {
+                background-color: #EAAA00;
+                color: #002855;
+                font-size: 16px; 
+            }
         """)
 
         # Switch state behavior
@@ -124,12 +138,13 @@ class NavBar(QWidget):
             self.manage_users_btn.setChecked(True)
 
     def check_logged_password(self):
-        password = QMessageBox("Enter Password", "Please enter your password to switch modes:", QMessageBox.Ok / QMessageBox.Cancel)
-        if check_logged_password(password):
-            self.toggle_mode()
-        else:
-            QMessageBox.warning(self, "Error", "Incorrect password. Mode switch aborted.")
-            self.mode_switch_btn.setChecked(not self.mode_switch_btn.isChecked())
+        password, ok = QInputDialog.getText(self, "Enter Password", "Please enter your password to switch modes:", QLineEdit.Password)
+        if ok:
+            if logged_user_confirmation(self.user, password):
+                self.toggle_mode()
+            else:
+                QMessageBox.warning(self, "Error", "Incorrect password. Mode switch aborted.")
+                self.mode_switch_btn.setChecked(not self.mode_switch_btn.isChecked())
 
     def toggle_mode(self):
 
@@ -137,6 +152,6 @@ class NavBar(QWidget):
             self.mode_switch_btn.setText("Web Mode")
             self.mode_switch_btn.setStyleSheet("background-color: #002855; color: white; border-radius: 5px;")
 
-        else:
+        elif not self.mode_switch_btn.isChecked():
             self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
             self.mode_switch_btn.setText("PLC Mode")
