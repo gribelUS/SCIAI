@@ -151,7 +151,18 @@ class NavBar(QWidget):
         if self.mode_switch_btn.isChecked():
             self.mode_switch_btn.setText("Web Mode")
             self.mode_switch_btn.setStyleSheet("background-color: #002855; color: white; border-radius: 5px;")
+            try:
+                connect_to_web_mode()
+            except Exception as e:
+                QMessageBox.critical(self, "Connection Error", f"Failed to connect to Web Mode: {str(e)}")
+                self.mode_switch_btn.setChecked(False)
 
         elif not self.mode_switch_btn.isChecked():
             self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
             self.mode_switch_btn.setText("PLC Mode")
+
+    def connect_to_web_mode():
+        # Placeholder for actual connection logic
+        if True:
+            return True
+        return False
