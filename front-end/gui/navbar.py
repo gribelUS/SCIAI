@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from gui.login import logged_user_confirmation
+from models.web_comm_connection import connect_to_web_mode
 
 class NavBar(QWidget):
     def __init__(self, user):
@@ -158,11 +159,6 @@ class NavBar(QWidget):
                 self.mode_switch_btn.setChecked(False)
 
         elif not self.mode_switch_btn.isChecked():
+            connect_to_plc_mode()
             self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
             self.mode_switch_btn.setText("PLC Mode")
-
-    def connect_to_web_mode():
-        # Placeholder for actual connection logic
-        if True:
-            return True
-        return False
