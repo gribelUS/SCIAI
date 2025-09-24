@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from gui.login import logged_user_confirmation
-from models.web_comm_connection import connect_to_web_mode
+from models.api import communication_mode
 
 class NavBar(QWidget):
     def __init__(self, user):
@@ -57,6 +57,7 @@ class NavBar(QWidget):
             layout.addWidget(self.manage_users_btn)
 
             self.mode_switch_btn = QPushButton("PLC Mode")
+            communication_mode(1)
             self.mode_switch_btn.setCursor(Qt.PointingHandCursor)
             self.mode_switch_btn.setCheckable(True)
             self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
@@ -152,13 +153,9 @@ class NavBar(QWidget):
         if self.mode_switch_btn.isChecked():
             self.mode_switch_btn.setText("Web Mode")
             self.mode_switch_btn.setStyleSheet("background-color: #002855; color: white; border-radius: 5px;")
-            try:
-                connect_to_web_mode()
-            except Exception as e:
-                QMessageBox.critical(self, "Connection Error", f"Failed to connect to Web Mode: {str(e)}")
-                self.mode_switch_btn.setChecked(False)
+            communication_mode(0)
 
         elif not self.mode_switch_btn.isChecked():
-            connect_to_plc_mode()
+            communication_mode(1)
             self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
             self.mode_switch_btn.setText("PLC Mode")

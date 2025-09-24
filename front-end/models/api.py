@@ -58,3 +58,10 @@ def remove_cart(cart_id, area):
         "barcode": cart_id,
         "area": area
     }
+
+@app.route('/prt/mode', methods=['POST'])
+def communication_mode(mode):
+    api_url = "http://localhost:2650/prt/mode"
+    payload = {
+        "mode": mode
+    }
