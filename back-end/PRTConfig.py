@@ -5,6 +5,8 @@ STATUS_BIT = '.END'
 
 TAG_TO_WRITE = 'SORTER_1_RESPONSE'
 
+
+
 CAR_DEST_MAP = {
    
 }

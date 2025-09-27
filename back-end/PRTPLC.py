@@ -41,6 +41,7 @@ class PRTPLC(PLC):
         self.write_tag(f'COBOT_AREA', area)
         #Test using barcode reader with the cobot
         self.write_tag('REMOVE_CART_BARCODE', barcode)
+        self.write_tag('REMOVE_CART_END', 1)
 
     def send_watchdog_signal(self):
         self.write_tag('OPC_WATCHDOG', 1)
