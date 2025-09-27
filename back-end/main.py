@@ -26,8 +26,7 @@ config = {
     'database': 'prtdb'
 }
 prtdb = PRTDB(config)
-
-server = Server(prtdb)
+server = None
 
 def get_destination(barcode: str, sorter_num: int):
     print(f"GET_DEST: barcode: {barcode}, sorter_num: {sorter_num}")
@@ -53,8 +52,10 @@ def process_barcode(barcode: str):
 
 def initialize_system():
     print(f"PRT_PLC: Connecting to PLC: {PRT_PLC_IP_ADDRESS}...")
-    global prt
+    global prt, server
     prt = PRTPLC()
+    # Create the Flask server with the connected PLC instance
+    server = Server(prtdb, prt)
     prt.write_tag(f'SORTER_1_REQUEST.END', 0)
     prt.write_tag(f'SORTER_2_REQUEST.END', 0)
     prt.write_tag(f'SORTER_1_REPORT.END', 0)
