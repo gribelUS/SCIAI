@@ -56,21 +56,3 @@ class LoginWindow(QDialog):
                 QMessageBox.warning(self, "Login Failed", "Invalid username or password.")
         except pymysql.MySQLError as e:
             QMessageBox.critical(self, "Database Error", str(e))
-
-# Standalone function for password confirmation
-def logged_user_confirmation(user, password) -> bool:
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT password_hash FROM users WHERE username = %s", (user['username'],))
-        db_user = cursor.fetchone()
-        cursor.close()
-        conn.close()
-
-        if db_user and check_password(password, db_user['password_hash']):
-            return True
-        else:
-            return False
-    except Exception as e:
-        print(f"Error confirming logged user: {e}")
-        return False

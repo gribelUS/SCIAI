@@ -1,5 +1,5 @@
 import requests
-from models.db import get_connection
+from models.db import get_connection, remove_cart_request
 import datetime
 from flask import Flask, request, jsonify
 
@@ -58,10 +58,10 @@ def remove_cart(cart_id, area):
         "barcode": cart_id,
         "area": area
     }
-
-@app.route('/prt/mode', methods=['POST'])
-def communication_mode(mode):
-    api_url = "http://localhost:2650/prt/mode"
-    payload = {
-        "mode": mode
-    }
+    try:
+        response = requests.post(api_url, json=payload)
+        if response.status_code == 200:
+            remove_cart_request(cart_id, area)
+    except requests.RequestException as e:
+        print(f"Error connecting to API: {e}")
+        

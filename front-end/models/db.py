@@ -2,6 +2,7 @@
 import pymysql
 import os
 from dotenv import load_dotenv
+import datetime
 
 # Load environment variables
 load_dotenv()
@@ -96,6 +97,21 @@ def get_cart_info(cart_id):
     except Exception as e:
         print(f"❌ Error fetching cart info: {e}")
         return None
+
+def remove_cart_request(cart_id, area):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO cart_logs (cart_id, position, event, action_type, time_stamp) VALUES (%s, %s, %s, %s, %s)",
+            (cart_id, f"Remove_Area_{area}", "Remove Cart", "Request", datetime.datetime.now())
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print(f"Logged remove cart request: {cart_id}, Area: {area}")
+    except Exception as e:
+        print(f"Error logging remove cart request: {e}")
 
 def fetch_activity_logs(limit=100):
     try:

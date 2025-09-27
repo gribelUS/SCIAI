@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QFrame, QVBoxLayout, QLabel, QSizePolicy, QPushButton, QComboBox
 from PyQt5.QtCore import Qt
 from gui.track_view import TrackView
-from models.db import get_cart_info
+from models.db import get_cart_info, remove_cart_request
 from models.api import send_cart_to_station
 from models.api import remove_cart
 

@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QSizePolicy, QPushButton, QVBoxLayout, QInputDialog, QLineEdit, QMessageBox
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from gui.login import logged_user_confirmation
-from models.api import communication_mode
+
 
 class NavBar(QWidget):
     def __init__(self, user):
@@ -56,17 +55,8 @@ class NavBar(QWidget):
             self.manage_users_btn.setCheckable(True)
             layout.addWidget(self.manage_users_btn)
 
-            self.mode_switch_btn = QPushButton("PLC Mode")
-            communication_mode(1)
-            self.mode_switch_btn.setCursor(Qt.PointingHandCursor)
-            self.mode_switch_btn.setCheckable(True)
-            self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
-            self.mode_switch_btn.clicked.connect(self.check_logged_password)
-            layout.addWidget(self.mode_switch_btn)
-
         else:
             self.manage_users_btn = None
-            self.mode_switch_btn = None
 
         layout.addStretch()
         outer_layout.addWidget(container)
@@ -138,24 +128,3 @@ class NavBar(QWidget):
             self.dashboard_btn.setChecked(False)
             self.activity_btn.setChecked(False)
             self.manage_users_btn.setChecked(True)
-
-    def check_logged_password(self):
-        password, ok = QInputDialog.getText(self, "Enter Password", "Please enter your password to switch modes:", QLineEdit.Password)
-        if ok:
-            if logged_user_confirmation(self.user, password):
-                self.toggle_mode()
-            else:
-                QMessageBox.warning(self, "Error", "Incorrect password. Mode switch aborted.")
-                self.mode_switch_btn.setChecked(not self.mode_switch_btn.isChecked())
-
-    def toggle_mode(self):
-
-        if self.mode_switch_btn.isChecked():
-            self.mode_switch_btn.setText("Web Mode")
-            self.mode_switch_btn.setStyleSheet("background-color: #002855; color: white; border-radius: 5px;")
-            communication_mode(0)
-
-        elif not self.mode_switch_btn.isChecked():
-            communication_mode(1)
-            self.mode_switch_btn.setStyleSheet("background-color: white; color: #002855; border-radius: 5px;")
-            self.mode_switch_btn.setText("PLC Mode")

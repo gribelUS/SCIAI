@@ -42,10 +42,5 @@ class Server:
             else:
                 return jsonify({'error': 'Database write failed'}), 500
             
-        @self.app.route('/prt/mode', methods=['POST'])
-        def get_communication_mode():
-            data = request.get_json()
-            mode = data.get('mode')
-
     def start_flask_server(self, host='0.0.0.0', port=2650):
         self.app.run(host=host, port=port)
