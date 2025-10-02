@@ -33,8 +33,8 @@ def load_config():
 # Connect to MySQL
 def get_connection():
     config = load_config()
-    print("🔍 db.py: Running get_connection()")
-    print(f"Connecting to MySQL with config: {config}")
+    #print("🔍 db.py: Running get_connection()")
+    #print(f"Connecting to MySQL with config: {config}")
     try:
         conn = pymysql.connect(
             host=config["host"],
@@ -45,8 +45,8 @@ def get_connection():
             connect_timeout=5,
             cursorclass=pymysql.cursors.DictCursor
         )
-        print("✅ MySQL connection established.")
-        print("🟢 get_connection(): returning connection object")
+        #print("✅ MySQL connection established.")
+        #print("🟢 get_connection(): returning connection object")
         return conn
     except Exception as err:
         import traceback

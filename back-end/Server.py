@@ -34,7 +34,7 @@ class Server:
         def remove_cart():
             data = request.get_json()
             barcode = data.get('barcode')
-            area = data.get('area')
+            area = int(data.get('area'))
 
             if not barcode or not area:
                 return jsonify({'error': 'Missing barcode or area'}), 400

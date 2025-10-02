@@ -84,7 +84,7 @@ class PRTDB(Database):
         args = []
         return self.fetch(query, args)
     
-    def store_remove_cart(self, barcode: str, area: str):
+    def store_remove_cart(self, barcode: str, area: int):
         """
         Insert a record containing the removal request of a cart into the database.
         """

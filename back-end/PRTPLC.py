@@ -42,6 +42,7 @@ class PRTPLC(PLC):
         #Test using barcode reader with the cobot
         #self.write_tag('UR_BARCODE', barcode)
         self.write_tag('UR_TRIGGER', 1)
+        return
 
     def send_watchdog_signal(self):
         self.write_tag('OPC_WATCHDOG', 1)

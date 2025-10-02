@@ -50,8 +50,7 @@ CREATE TABLE `prtsorterresponse` (
 
 CREATE TABLE `prtremovecart` (
  `barcode` char(4) NOT NULL,
- `area` tinyint unsigned NOT NULL,
- PRIMARY KEY (`barcode`)
+ `area` tinyint unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
