@@ -38,10 +38,10 @@ class PRTPLC(PLC):
         
     def remove_cart(self, area: int, barcode: str):
         # COBOT_AREA is an alias for 'URI.Integer.Register[1]'
-        self.write_tag(f'COBOT_AREA', area)
+        self.write_tag(f'UR_AREA', area)
         #Test using barcode reader with the cobot
-        self.write_tag('REMOVE_CART_BARCODE', barcode)
-        self.write_tag('REMOVE_CART_END', 1)
+        #self.write_tag('UR_BARCODE', barcode)
+        self.write_tag('UR_TRIGGER', 1)
 
     def send_watchdog_signal(self):
         self.write_tag('OPC_WATCHDOG', 1)

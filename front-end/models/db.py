@@ -129,7 +129,7 @@ def fetch_activity_logs(limit=100):
         logs = cursor.fetchall()
         cursor.close()
         conn.close()
-        print(f"Fetched {len(logs)} activity log entries.")
+        #print(f"Fetched {len(logs)} activity log entries.")
         return logs
     except Exception as e:
         print(f"❌ Error fetching activity logs: {e}")
