@@ -57,7 +57,7 @@ class PRTDB(Database):
         SET destination = %s
         WHERE barcode = %s
         """
-        args = [(destination, barcode)]
+        args = (destination, barcode)
         return self.update(query, args)
 
     def get_destination_info(self, barcode: str):
