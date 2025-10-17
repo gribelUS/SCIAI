@@ -17,7 +17,7 @@ def test_log_event(cart_id, position, status, transaction_id=None):
 
 if __name__ == "__main__":
     print("Testing with transaction_id=None (should log as 'Report'):")
-    test_log_event("TEST123", "Station_1", "active", None)
+    test_log_event("0009", "Station_1", "active", None)
 
     print("\nTesting with transaction_id set (should log as 'Request'):")
-    test_log_event("TEST456", "Station_2", "inactive", "TXN001")
+    test_log_event("0006", "Station_2", "inactive", "TXN001")

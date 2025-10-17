@@ -11,10 +11,17 @@ def send_cart_to_station(cart_id, station_id):
     """
     Send a request to the API to move a cart to a specific station.
     """
+    station_map = {
+        "Station_1": 1,
+        "Station_2": 2,
+        "Station_3": 3,
+        "Station_4": 4
+    }
+    destination = station_map.get(station_id)
     api_url = "http://localhost:2650/prt/dest"
     payload = {
         "barcode": cart_id,
-        "destination": station_id
+        "destination": destination
     }
 
     try:
@@ -24,7 +31,7 @@ def send_cart_to_station(cart_id, station_id):
             cursor = conn.cursor()
 
             query = """
-                INSERT INTO cart_logs (cart_id, position, event_type, time_stamp)
+                INSERT INTO cart_logs (cart_id, position, event, time_stamp)
                 VALUES (%s, %s, %s, %s)"""
             data = (cart_id, station_id, 'sent', datetime.datetime.now())
             cursor.execute(query, data)
@@ -37,7 +44,7 @@ def send_cart_to_station(cart_id, station_id):
             cursor = conn.cursor()
 
             query = """
-                INSERT INTO cart_logs (cart_id, position, event_type, time_stamp)
+                INSERT INTO cart_logs (cart_id, position, event, time_stamp)
                 VALUES (%s, %s, %s, %s)"""
             data = (cart_id, station_id, 'error', datetime.datetime.now())
             cursor.execute(query, data)
