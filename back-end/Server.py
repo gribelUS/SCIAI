@@ -41,7 +41,6 @@ class Server:
             success = self.prtdb.store_remove_cart(barcode, area)
             if success:
                 self.prtplc.remove_cart(barcode=barcode, area=area)
-                self.prtdb.update_destination_info(barcode, destination=5) # Set destination to 5 (remove)
                 return jsonify({'message': f'Cart {barcode} removed to area {area}'}), 200
             else:
                 return jsonify({'error': 'Database write failed'}), 500
