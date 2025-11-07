@@ -44,20 +44,6 @@ class HomeView(QWidget):
             border-radius: 6px;
             """)
 
-        #self.cart_status = QWidget()
-        #self.cart_status_layout = QHBoxLayout()
-        #self.cart_status_layout.setContentsMargins(5, 5, 5, 5)
-        #self.cart_status_layout.setSpacing(10)
-        #self.cart_status.setLayout(self.cart_status_layout)
-        #self.cart_status.setStyleSheet(
-        #    """
-        #    padding: 10px;
-        #    font-size: 15;
-        #    color: white;
-        #    border-radius: 6px;
-        #    """
-        #)
-
         self.info_label = QLabel("Select a cart to view details.")
         self.info_label.setWordWrap(True)
         self.info_label.setStyleSheet(
@@ -148,7 +134,7 @@ class HomeView(QWidget):
 
         # Dropdown for areas
         self.area_dropdown = QComboBox()
-        self.area_dropdown.addItems(["","Area 1", "Area 2", "Area 3", "Area 4"])
+        self.area_dropdown.addItems(["","Area 5", "Area 6", "Area 7", "Area 8", "Area 9"])
         self.area_dropdown.setEnabled(False)
         self.area_dropdown.setStyleSheet(
             """

@@ -38,9 +38,8 @@ class Server:
 
             if not barcode or not area:
                 return jsonify({'error': 'Missing barcode or area'}), 400
-            success = self.prtdb.store_remove_cart(barcode, area)
+            success = self.prtdb.update_destination_info(barcode, area)
             if success:
-                self.prtplc.remove_cart(barcode=barcode, area=area)
                 return jsonify({'message': f'Cart {barcode} removed to area {area}'}), 200
             else:
                 return jsonify({'error': 'Database write failed'}), 500
